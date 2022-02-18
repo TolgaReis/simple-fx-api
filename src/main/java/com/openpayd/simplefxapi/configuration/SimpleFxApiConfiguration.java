@@ -1,13 +1,13 @@
 package com.openpayd.simplefxapi.configuration;
 
-import com.openpayd.simplefxapi.service.FxService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class SimpleFxApiConfiguration {
     @Bean
-    public FxService getFxService() {
-        return new FxService();
+    public RestTemplate getRestTemplate() {
+        return new RestTemplate();
     }
 }

@@ -8,6 +8,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ExchangeRateRequest {
-    private String sourceForeign;
-    private String targetForeign;
+    private String baseCurrency;
+    private String targetCurrency;
 }

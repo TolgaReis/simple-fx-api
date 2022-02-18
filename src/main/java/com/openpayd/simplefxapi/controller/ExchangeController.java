@@ -17,6 +17,8 @@ public class ExchangeController {
     @GetMapping("rate")
     @ResponseBody
     private ExchangeRateResponse getExchangeRate(@RequestBody ExchangeRateRequest exchangeRateRequest) {
+        exchangeRateRequest.setBaseCurrency(exchangeRateRequest.getBaseCurrency().toUpperCase());
+        exchangeRateRequest.setTargetCurrency(exchangeRateRequest.getTargetCurrency().toUpperCase());
         return fxService.getExchangeRate(exchangeRateRequest);
     }
 }
