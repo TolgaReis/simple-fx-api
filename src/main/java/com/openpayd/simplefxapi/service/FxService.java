@@ -1,6 +1,6 @@
 package com.openpayd.simplefxapi.service;
 
-import com.openpayd.simplefxapi.model.ExchangeRateRequest;
+import com.openpayd.simplefxapi.configuration.CurrencyApiSettings;
 import com.openpayd.simplefxapi.model.ExchangeRateResponse;
 import com.openpayd.simplefxapi.model.LatestExchangeRates;
 import com.openpayd.simplefxapi.repository.CurrencyInMemoryRepository;
@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Objects;
-
 @Service
 public class FxService {
     private RestTemplate restTemplate;
     private CurrencyInMemoryRepository currencyInMemoryRepository;
+    private CurrencyApiSettings currencyApiSettings;
 
-    public FxService(RestTemplate restTemplate, CurrencyInMemoryRepository currencyInMemoryRepository) {
+    public FxService(RestTemplate restTemplate, CurrencyInMemoryRepository currencyInMemoryRepository, CurrencyApiSettings currencyApiSettings) {
         this.restTemplate = restTemplate;
         this.currencyInMemoryRepository = currencyInMemoryRepository;
+        this.currencyApiSettings = currencyApiSettings;
     }
 
     public ExchangeRateResponse getExchangeRate(String baseCurrency, String targetCurrency) {
@@ -61,11 +61,12 @@ public class FxService {
     }
 
     private LatestExchangeRates getLatestExchangeRates(String baseCurrency) {
-        LatestExchangeRates latestExchangeRates = restTemplate.exchange("https://freecurrencyapi.net/api/v2/latest?apikey={apikey}&base_currency={base_currency}", HttpMethod.GET, HttpEntity.EMPTY,LatestExchangeRates.class,"bd9139f0-90db-11ec-86aa-51d7273f33ea",baseCurrency).getBody();
+        LatestExchangeRates latestExchangeRates = restTemplate.exchange(currencyApiSettings.getUrl(),
+                                                                        HttpMethod.GET,
+                                                                        HttpEntity.EMPTY,
+                                                                        LatestExchangeRates.class,
+                                                                        currencyApiSettings.getKey(),
+                                                                        baseCurrency).getBody();
         return latestExchangeRates;
     }
-
-    //private ExchangeRateResponse validateRequest(ExchangeRateRequest exchangeRateRequest) {
-
-    //}
 }

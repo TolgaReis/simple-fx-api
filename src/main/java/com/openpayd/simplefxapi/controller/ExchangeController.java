@@ -1,6 +1,5 @@
 package com.openpayd.simplefxapi.controller;
 
-import com.openpayd.simplefxapi.model.ExchangeRateRequest;
 import com.openpayd.simplefxapi.model.ExchangeRateResponse;
 import com.openpayd.simplefxapi.service.FxService;
 import org.springframework.web.bind.annotation.*;
