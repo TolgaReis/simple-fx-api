@@ -6,7 +6,9 @@ import com.openpayd.simplefxapi.service.FxService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/exchange/")
+@RequestMapping(path = "/api/v1/exchange",
+                produces = "application/json")
+@CrossOrigin(origins = "*")
 public class ExchangeController {
     private FxService fxService;
 
@@ -14,11 +16,9 @@ public class ExchangeController {
         this.fxService = fxService;
     }
 
-    @GetMapping("rate")
-    @ResponseBody
-    private ExchangeRateResponse getExchangeRate(@RequestBody ExchangeRateRequest exchangeRateRequest) {
-        exchangeRateRequest.setBaseCurrency(exchangeRateRequest.getBaseCurrency().toUpperCase());
-        exchangeRateRequest.setTargetCurrency(exchangeRateRequest.getTargetCurrency().toUpperCase());
-        return fxService.getExchangeRate(exchangeRateRequest);
+    @GetMapping("/rate")
+    private ExchangeRateResponse getExchangeRate(@RequestParam("base") String baseCurrency,
+                                                 @RequestParam("target") String targetCurrency) {
+        return fxService.getExchangeRate(baseCurrency.toUpperCase(), targetCurrency.toUpperCase());
     }
 }
