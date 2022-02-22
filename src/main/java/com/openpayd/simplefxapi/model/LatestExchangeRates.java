@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.util.Map;
 
+/**
+ * The client object used for the response returned from the currency API.
+ */
 @Getter
 @Setter
 public class LatestExchangeRates {
