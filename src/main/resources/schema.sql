@@ -11,6 +11,7 @@ CREATE TABLE CONVERSION (
   target_currency VARCHAR(3) NOT NULL,
   base_amount DECIMAL(19, 4) NOT NULL,
   target_amount DECIMAL(19, 4) NOT NULL,
+  exchange_rate FLOAT NOT NULL,
   transaction_id UUID DEFAULT RANDOM_UUID() NOT NULL,
   date DATE DEFAULT CURRENT_DATE NOT NULL,
   FOREIGN KEY (base_currency) REFERENCES CURRENCY (currency),

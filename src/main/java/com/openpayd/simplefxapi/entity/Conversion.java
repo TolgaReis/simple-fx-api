@@ -1,12 +1,17 @@
 package com.openpayd.simplefxapi.entity;
 
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -23,8 +28,9 @@ public class Conversion {
     private String targetCurrency;
     private Double baseAmount;
     private Double targetAmount;
-    @org.hibernate.annotations.Generated(value = GenerationTime.INSERT)
+    private Double exchangeRate;
+    @Generated(value = GenerationTime.INSERT)
     private UUID transactionId;
-    @org.hibernate.annotations.Generated(value = GenerationTime.INSERT)
+    @Generated(value = GenerationTime.INSERT)
     private LocalDate date;
 }

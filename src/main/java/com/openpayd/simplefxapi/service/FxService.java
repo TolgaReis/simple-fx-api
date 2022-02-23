@@ -1,24 +1,15 @@
 package com.openpayd.simplefxapi.service;
 
 import com.openpayd.simplefxapi.configuration.CurrencyApiSettings;
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-import com.openpayd.simplefxapi.model.ExchangeRateResponse;
-=======
 import com.openpayd.simplefxapi.entity.Conversion;
+import com.openpayd.simplefxapi.model.LatestExchangeRates;
 import com.openpayd.simplefxapi.model.conversion.ConversionRequest;
 import com.openpayd.simplefxapi.model.conversion.ConversionResponse;
 import com.openpayd.simplefxapi.model.exchangerate.ExchangeRateResponse;
->>>>>>> Stashed changes
-=======
-import com.openpayd.simplefxapi.model.exchangerate.ExchangeRateResponse;
->>>>>>> a2f6542f3363f5ede0fa0acc5b7d6c04c0a61dfd
-import com.openpayd.simplefxapi.model.LatestExchangeRates;
 import com.openpayd.simplefxapi.repository.ConversionRepository;
 import com.openpayd.simplefxapi.repository.CurrencyInMemoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -57,14 +48,12 @@ public class FxService {
         ExchangeRateResponse exchangeRateResponse;
         if (!this.currencyInMemoryRepository.contains(baseCurrency)) {
             exchangeRateResponse = ExchangeRateResponse.builder().
-                                                        exchangeRate(-1).
                                                         responseCode(1).
                                                         responseMessage("Invalid base currency!").
                                                         build();
             logger.error("Base currency is invalid!");
         } else if (!this.currencyInMemoryRepository.contains(targetCurrency)) {
             exchangeRateResponse = ExchangeRateResponse.builder().
-                                                        exchangeRate(-1).
                                                         responseCode(2).
                                                         responseMessage("Invalid target currency!").
                                                         build();
@@ -83,9 +72,15 @@ public class FxService {
 
     public ConversionResponse getConversionResponse(ConversionRequest conversionRequest) {
         ConversionResponse conversionResponse;
-        if (!this.currencyInMemoryRepository.contains(conversionRequest.getBaseCurrency())) {
+        if (conversionRequest.getBaseAmount() < 0) {
             conversionResponse = ConversionResponse.builder().
-                                                    targetAmount(-1).
+                                                    transactionId(null).
+                                                    responseCode(1).
+                                                    responseMessage("Invalid base currency!").
+                                                    build();
+            logger.error("Negative base amount!");
+        } else if (!this.currencyInMemoryRepository.contains(conversionRequest.getBaseCurrency())) {
+            conversionResponse = ConversionResponse.builder().
                                                     transactionId(null).
                                                     responseCode(1).
                                                     responseMessage("Invalid base currency!").
@@ -93,7 +88,6 @@ public class FxService {
             logger.error("Base currency is invalid!");
         } else if (!this.currencyInMemoryRepository.contains(conversionRequest.getTargetCurrency())) {
             conversionResponse = ConversionResponse.builder().
-                                                    targetAmount(-1).
                                                     transactionId(null).
                                                     responseCode(2).
                                                     responseMessage("Invalid target currency!").
@@ -104,7 +98,6 @@ public class FxService {
             double targetAmount = conversionRequest.getBaseAmount() * exchangeRate;
             if (targetAmount > MAX_AMOUNT) {
                 conversionResponse = ConversionResponse.builder().
-                                                        targetAmount(-1).
                                                         transactionId(null).
                                                         responseCode(3).
                                                         responseMessage("Target amount too long to save!").
@@ -116,6 +109,7 @@ public class FxService {
                         targetCurrency(conversionRequest.getTargetCurrency()).
                         baseAmount(conversionRequest.getBaseAmount()).
                         targetAmount(targetAmount).
+                        exchangeRate(exchangeRate).
                         build();
                 Conversion savedConversion = conversionRepository.saveAndFlush(conversion);
                 conversionResponse = ConversionResponse.builder().

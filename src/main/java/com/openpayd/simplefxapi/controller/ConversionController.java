@@ -2,19 +2,12 @@ package com.openpayd.simplefxapi.controller;
 
 import com.openpayd.simplefxapi.model.conversion.ConversionRequest;
 import com.openpayd.simplefxapi.model.conversion.ConversionResponse;
-<<<<<<< HEAD
 import com.openpayd.simplefxapi.service.FxService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-=======
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
->>>>>>> a2f6542f3363f5ede0fa0acc5b7d6c04c0a61dfd
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/v1/conversion",
@@ -23,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConversionController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-<<<<<<< HEAD
     FxService fxService;
 
     public ConversionController(FxService fxService) {
@@ -31,9 +23,7 @@ public class ConversionController {
     }
 
     @PostMapping("")
-    public ConversionResponse postConversion(@RequestBody ConversionRequest conversionRequest) {
+    public ConversionResponse postConversion(@Valid @RequestBody ConversionRequest conversionRequest) {
         return fxService.getConversionResponse(conversionRequest);
     }
-=======
->>>>>>> a2f6542f3363f5ede0fa0acc5b7d6c04c0a61dfd
 }

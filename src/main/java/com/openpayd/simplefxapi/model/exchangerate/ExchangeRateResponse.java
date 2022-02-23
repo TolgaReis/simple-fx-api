@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class ExchangeRateResponse {
-    private double exchangeRate;
-    private int responseCode;
+    private Double exchangeRate;
+    private Integer responseCode;
     private String responseMessage;
 }
