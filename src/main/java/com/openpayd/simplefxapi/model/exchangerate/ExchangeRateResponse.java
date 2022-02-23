@@ -1,4 +1,4 @@
-package com.openpayd.simplefxapi.model;
+package com.openpayd.simplefxapi.model.exchangerate;
 
 import lombok.Builder;
 import lombok.Getter;

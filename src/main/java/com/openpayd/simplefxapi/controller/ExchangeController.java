@@ -1,6 +1,6 @@
 package com.openpayd.simplefxapi.controller;
 
-import com.openpayd.simplefxapi.model.ExchangeRateResponse;
+import com.openpayd.simplefxapi.model.exchangerate.ExchangeRateResponse;
 import com.openpayd.simplefxapi.service.FxService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class ExchangeController {
      * @return  An object consisting of the return code, the return message, and the rate.
      */
     @GetMapping("/rate")
-    private ExchangeRateResponse getExchangeRate(@RequestParam("base") String baseCurrency,
+    public ExchangeRateResponse getExchangeRate(@RequestParam("base") String baseCurrency,
                                                  @RequestParam("target") String targetCurrency) {
         logger.debug("Get exchange rate request.");
         ExchangeRateResponse exchangeRateResponse = fxService.getExchangeRateResponse(baseCurrency.toUpperCase(), targetCurrency.toUpperCase());

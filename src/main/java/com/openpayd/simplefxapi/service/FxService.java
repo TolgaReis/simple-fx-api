@@ -1,6 +1,7 @@
 package com.openpayd.simplefxapi.service;
 
 import com.openpayd.simplefxapi.configuration.CurrencyApiSettings;
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 import com.openpayd.simplefxapi.model.ExchangeRateResponse;
 =======
@@ -9,6 +10,9 @@ import com.openpayd.simplefxapi.model.conversion.ConversionRequest;
 import com.openpayd.simplefxapi.model.conversion.ConversionResponse;
 import com.openpayd.simplefxapi.model.exchangerate.ExchangeRateResponse;
 >>>>>>> Stashed changes
+=======
+import com.openpayd.simplefxapi.model.exchangerate.ExchangeRateResponse;
+>>>>>>> a2f6542f3363f5ede0fa0acc5b7d6c04c0a61dfd
 import com.openpayd.simplefxapi.model.LatestExchangeRates;
 import com.openpayd.simplefxapi.repository.ConversionRepository;
 import com.openpayd.simplefxapi.repository.CurrencyInMemoryRepository;
