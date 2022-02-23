@@ -1,14 +1,10 @@
 package com.openpayd.simplefxapi.model.conversion;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @ToString
 @Builder
 public class ConversionResponse {
