@@ -1,7 +1,7 @@
 package com.openpayd.simplefxapi.service;
 
 import com.openpayd.simplefxapi.configuration.CurrencyApiSettings;
-import com.openpayd.simplefxapi.model.ExchangeRateResponse;
+import com.openpayd.simplefxapi.model.exchangerate.ExchangeRateResponse;
 import com.openpayd.simplefxapi.model.LatestExchangeRates;
 import com.openpayd.simplefxapi.repository.CurrencyInMemoryRepository;
 import org.slf4j.Logger;
