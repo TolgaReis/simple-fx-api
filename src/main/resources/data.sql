@@ -1,4 +1,4 @@
-INSERT INTO TBL_CURRENCY (currency)
+INSERT INTO CURRENCY (currency)
 VALUES
     ('USD'), ('JPY'), ('CNY'), ('CHF'), ('CAD'), ('MXN'), ('INR'), ('BRL'), ('RUB'), ('KRW'),
     ('IDR'), ('TRY'), ('SAR'), ('SEK'), ('NGN'), ('PLN'), ('ARS'), ('NOK'), ('TWD'), ('IRR'),
