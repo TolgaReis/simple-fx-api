@@ -1,19 +1,19 @@
-package com.openpayd.simplefxapi.model;
+package com.openpayd.simplefxapi.model.conversion;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * The response object required to perform the exchange rate operation.
- */
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString
 @Builder
-public class ExchangeRateResponse {
-    private double exchangeRate;
+public class ConversionResponse {
+    private double targetAmount;
+    private UUID transactionId;
     private int responseCode;
     private String responseMessage;
 }

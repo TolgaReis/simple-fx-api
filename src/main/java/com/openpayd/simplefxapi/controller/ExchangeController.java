@@ -32,7 +32,7 @@ public class ExchangeController {
     private ExchangeRateResponse getExchangeRate(@RequestParam("base") String baseCurrency,
                                                  @RequestParam("target") String targetCurrency) {
         logger.debug("Get exchange rate request.");
-        ExchangeRateResponse exchangeRateResponse = fxService.getExchangeRate(baseCurrency.toUpperCase(), targetCurrency.toUpperCase());
+        ExchangeRateResponse exchangeRateResponse = fxService.getExchangeRateResponse(baseCurrency.toUpperCase(), targetCurrency.toUpperCase());
         return exchangeRateResponse;
     }
 }
