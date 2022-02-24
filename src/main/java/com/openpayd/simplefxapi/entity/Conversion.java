@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -32,5 +34,5 @@ public class Conversion {
     @Generated(value = GenerationTime.INSERT)
     private UUID transactionId;
     @Generated(value = GenerationTime.INSERT)
-    private LocalDate date;
+    private Timestamp date;
 }
