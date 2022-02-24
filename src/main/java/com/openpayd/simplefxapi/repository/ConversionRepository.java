@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+/**
+ * Repository interface used for conversion table.
+ */
 @Repository
 public interface ConversionRepository extends JpaRepository<Conversion, Integer> {
     Page<Conversion> findAllByDateGreaterThan(ZonedDateTime date, Pageable pageable);

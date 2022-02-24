@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+/**
+ * Controller includes APIs related to conversion operations.
+ */
 @RestController
 @RequestMapping(path = "/api/v1/conversion",
                 produces = "application/json")
@@ -28,6 +31,11 @@ public class ConversionController {
         this.fxService = fxService;
     }
 
+    /**
+     * Performs the conversion and returns the result.
+     * @param conversionRequest Base amount, base currency and target currency.
+     * @return Response object generated according to successful and unsuccessful cases.
+     */
     @PostMapping("")
     public ResponseEntity<?> postConversion(@RequestBody(required = false) ConversionRequest conversionRequest) {
         ConversionResponse conversionResponse = fxService.getConversionResponse(conversionRequest);
@@ -38,6 +46,13 @@ public class ConversionController {
         }
     }
 
+    /**
+     * It obtains the information of previously made transactions according to the date or transactionId filters.
+     * @param transactionId Transaction ID of the transaction performed.
+     * @param date The start date from which the following transactions are requested to be listed.
+     * @param pageable It allows the transaction list to be paginated with page and size.
+     * @return Response object generated from factory for successful and unsuccessful cases.
+     */
     @GetMapping("/list")
     public ResponseEntity<?> getConversionList(@RequestParam(required = false) UUID transactionId,
                                                @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime date,

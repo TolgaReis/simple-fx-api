@@ -6,11 +6,9 @@ import lombok.*;
 import java.sql.Timestamp;
 
 /**
- * The response object required to perform the exchange rate operation.
+ * Response object required to perform the exchange rate operation.
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @Builder
 public class ExchangeRateSuccess implements ExchangeRateResponse {

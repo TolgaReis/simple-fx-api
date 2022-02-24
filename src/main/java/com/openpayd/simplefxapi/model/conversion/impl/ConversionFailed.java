@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
+/**
+ * Error response object for conversion operation.
+ */
 @Data
 @ToString
 @Builder

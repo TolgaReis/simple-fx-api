@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Response object for conversion list operation.
+ */
 @Data
 @Builder
 public class ConversionListResponse {

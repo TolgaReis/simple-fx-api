@@ -1,5 +1,8 @@
 package com.openpayd.simplefxapi.enums;
 
+/**
+ * Response codes used in error responses.
+ */
 public enum ErrorTypes {
     INVALID_BASE_CURRENCY,
     INVALID_TARGET_CURRENCY,

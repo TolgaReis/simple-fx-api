@@ -8,6 +8,9 @@ import lombok.ToString;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+/**
+ * Successful response object for conversion operation.
+ */
 @Data
 @ToString
 @Builder
