@@ -1,9 +1,11 @@
 package com.openpayd.simplefxapi.controller;
 
 import com.openpayd.simplefxapi.model.exchangerate.ExchangeRateResponse;
+import com.openpayd.simplefxapi.model.exchangerate.impl.ExchangeRateSuccess;
 import com.openpayd.simplefxapi.service.FxService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -29,10 +31,14 @@ public class ExchangeController {
      * @return  An object consisting of the return code, the return message, and the rate.
      */
     @GetMapping("/rate")
-    public ExchangeRateResponse getExchangeRate(@RequestParam("base") String baseCurrency,
-                                                 @RequestParam("target") String targetCurrency) {
+    public ResponseEntity<?> getExchangeRate(@RequestParam(value = "base", required = false) String baseCurrency,
+                                             @RequestParam(value = "target", required = false) String targetCurrency) {
         logger.debug("Get exchange rate request.");
-        ExchangeRateResponse exchangeRateResponse = fxService.getExchangeRateResponse(baseCurrency.toUpperCase(), targetCurrency.toUpperCase());
-        return exchangeRateResponse;
+        ExchangeRateResponse exchangeRateResponse = fxService.getExchangeRateResponse(baseCurrency, targetCurrency);
+        if (exchangeRateResponse.getClass().equals(ExchangeRateSuccess.class)) {
+            return ResponseEntity.ok().body(exchangeRateResponse);
+        } else {
+            return ResponseEntity.badRequest().body(exchangeRateResponse);
+        }
     }
 }

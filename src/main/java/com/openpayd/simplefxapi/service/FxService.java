@@ -2,10 +2,13 @@ package com.openpayd.simplefxapi.service;
 
 import com.openpayd.simplefxapi.configuration.CurrencyApiSettings;
 import com.openpayd.simplefxapi.entity.Conversion;
+import com.openpayd.simplefxapi.enums.ErrorTypes;
 import com.openpayd.simplefxapi.model.LatestExchangeRates;
 import com.openpayd.simplefxapi.model.conversion.ConversionRequest;
 import com.openpayd.simplefxapi.model.conversion.ConversionResponse;
 import com.openpayd.simplefxapi.model.exchangerate.ExchangeRateResponse;
+import com.openpayd.simplefxapi.model.exchangerate.impl.ExchangeRateFailed;
+import com.openpayd.simplefxapi.model.exchangerate.impl.ExchangeRateSuccess;
 import com.openpayd.simplefxapi.repository.ConversionRepository;
 import com.openpayd.simplefxapi.repository.CurrencyInMemoryRepository;
 import org.slf4j.Logger;
@@ -14,6 +17,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.sql.Timestamp;
+import java.time.Instant;
 
 /**
  * Service class where necessary logical operations are done in APIs.
@@ -46,23 +52,30 @@ public class FxService {
      */
     public ExchangeRateResponse getExchangeRateResponse(String baseCurrency, String targetCurrency) {
         ExchangeRateResponse exchangeRateResponse;
-        if (!this.currencyInMemoryRepository.contains(baseCurrency)) {
-            exchangeRateResponse = ExchangeRateResponse.builder().
-                                                        responseCode(1).
-                                                        responseMessage("Invalid base currency!").
-                                                        build();
+        if (baseCurrency == null || targetCurrency == null) {
+            exchangeRateResponse = ExchangeRateFailed.builder().
+                                                      errorCode(ErrorTypes.NOT_EXIST_PARAMETER).
+                                                      message("Required parameter does not exist!").
+                                                      build();
+            logger.error("Required parameter does not exist!");
+        } else if (!this.currencyInMemoryRepository.contains(baseCurrency.toUpperCase())) {
+            exchangeRateResponse = ExchangeRateFailed.builder().
+                                                      errorCode(ErrorTypes.INVALID_BASE_CURRENCY).
+                                                      message("Base currency is invalid!").
+                                                      build();
             logger.error("Base currency is invalid!");
-        } else if (!this.currencyInMemoryRepository.contains(targetCurrency)) {
-            exchangeRateResponse = ExchangeRateResponse.builder().
-                                                        responseCode(2).
-                                                        responseMessage("Invalid target currency!").
-                                                        build();
+        } else if (!this.currencyInMemoryRepository.contains(targetCurrency.toUpperCase())) {
+            exchangeRateResponse = ExchangeRateFailed.builder().
+                                                      errorCode(ErrorTypes.INVALID_TARGET_CURRENCY).
+                                                      message("Target currency is invalid!").
+                                                      build();
             logger.error("Target currency is invalid!");
         } else {
-            exchangeRateResponse = ExchangeRateResponse.builder().
-                                                        exchangeRate(getExchangeRate(baseCurrency, targetCurrency)).
-                                                        responseCode(0).
-                                                        responseMessage("Successful!").
+            exchangeRateResponse = ExchangeRateSuccess.builder().
+                                                        exchangeRate(getExchangeRate(baseCurrency.toUpperCase(), targetCurrency.toUpperCase())).
+                                                        timestamp(Timestamp.from(Instant.now())).
+                                                        baseCurrency(baseCurrency.toUpperCase()).
+                                                        targetCurrency(targetCurrency.toUpperCase()).
                                                         build();
             logger.info("Exchange rate retrieved successfully!");
         }
