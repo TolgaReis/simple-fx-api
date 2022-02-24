@@ -1,6 +1,5 @@
 package com.openpayd.simplefxapi.controller;
 
-import com.openpayd.simplefxapi.entity.Conversion;
 import com.openpayd.simplefxapi.model.conversion.ConversionRequest;
 import com.openpayd.simplefxapi.model.conversion.ConversionResponse;
 import com.openpayd.simplefxapi.model.conversion.impl.ConversionSuccess;
@@ -8,22 +7,12 @@ import com.openpayd.simplefxapi.model.conversionlist.ConversionListResponse;
 import com.openpayd.simplefxapi.service.FxService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.UUID;
 
 @RestController

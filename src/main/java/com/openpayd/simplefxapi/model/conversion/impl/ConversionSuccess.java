@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 

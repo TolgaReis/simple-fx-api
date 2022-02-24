@@ -12,7 +12,7 @@
 	<artifactId>simple-fx-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>simple-fx-api</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Simple fx API for some basic currency operations</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -53,11 +53,6 @@
 			<artifactId>javax.persistence-api</artifactId>
 			<version>2.2</version>
 		</dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>2.0.1.Final</version>
-        </dependency>
     </dependencies>
 
 	<build>
