@@ -6,6 +6,8 @@ import com.openpayd.simplefxapi.enums.ErrorTypes;
 import com.openpayd.simplefxapi.model.LatestExchangeRates;
 import com.openpayd.simplefxapi.model.conversion.ConversionRequest;
 import com.openpayd.simplefxapi.model.conversion.ConversionResponse;
+import com.openpayd.simplefxapi.model.conversion.impl.ConversionFailed;
+import com.openpayd.simplefxapi.model.conversion.impl.ConversionSuccess;
 import com.openpayd.simplefxapi.model.conversionlist.ConversionListResponse;
 import com.openpayd.simplefxapi.model.exchangerate.ExchangeRateResponse;
 import com.openpayd.simplefxapi.model.exchangerate.impl.ExchangeRateFailed;
@@ -15,19 +17,16 @@ import com.openpayd.simplefxapi.repository.CurrencyInMemoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.UUID;
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.util.UUID;
 
 /**
  * Service class where necessary logical operations are done in APIs.
@@ -35,7 +34,7 @@ import java.time.Instant;
 @Service
 public class FxService {
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    private static final double MAX_AMOUNT = 999999999999999.9999;
+    private static final double MAX_AMOUNT = 9999999999999999999999999.9999;
 
     private RestTemplate restTemplate;
     private CurrencyInMemoryRepository currencyInMemoryRepository;
@@ -91,39 +90,49 @@ public class FxService {
         return exchangeRateResponse;
     }
 
+    /**
+     * Performs the conversion and returns the result.
+     * @param conversionRequest Base amount, base currency and target currency.
+     * @return Response object generated according to successful and unsuccessful cases.
+     */
     public ConversionResponse getConversionResponse(ConversionRequest conversionRequest) {
         ConversionResponse conversionResponse;
-        if (conversionRequest.getBaseAmount() < 0) {
-            conversionResponse = ConversionResponse.builder().
-                                                    transactionId(null).
-                                                    responseCode(1).
-                                                    responseMessage("Invalid base currency!").
-                                                    build();
-            logger.error("Negative base amount!");
+        if (conversionRequest == null ||
+            conversionRequest.getBaseAmount() == null ||
+            conversionRequest.getBaseCurrency() == null ||
+            conversionRequest.getTargetCurrency() == null) {
+            conversionResponse = ConversionFailed.builder().
+                                                  errorCode(ErrorTypes.NOT_EXIST_PARAMETER).
+                                                  message("Required parameter does not exist!").
+                                                  build();
+            logger.error("Required parameter does not exist!");
+        } else if (conversionRequest.getBaseAmount() < 0) {
+            conversionResponse = ConversionFailed.builder().
+                                                  errorCode(ErrorTypes.INVALID_BASE_AMOUNT).
+                                                  message("Invalid base amount!").
+                                                  build();
+            logger.error("Invalid base amount!");
         } else if (!this.currencyInMemoryRepository.contains(conversionRequest.getBaseCurrency())) {
-            conversionResponse = ConversionResponse.builder().
-                                                    transactionId(null).
-                                                    responseCode(1).
-                                                    responseMessage("Invalid base currency!").
-                                                    build();
+            conversionResponse = ConversionFailed.builder().
+                                                  errorCode(ErrorTypes.INVALID_BASE_CURRENCY).
+                                                  message("Base currency is invalid!").
+                                                  build();
             logger.error("Base currency is invalid!");
         } else if (!this.currencyInMemoryRepository.contains(conversionRequest.getTargetCurrency())) {
-            conversionResponse = ConversionResponse.builder().
-                                                    transactionId(null).
-                                                    responseCode(2).
-                                                    responseMessage("Invalid target currency!").
-                                                    build();
+            conversionResponse = ConversionFailed.builder().
+                                                  errorCode(ErrorTypes.INVALID_TARGET_CURRENCY).
+                                                  message("Target currency is invalid!").
+                                                  build();
             logger.error("Target currency is invalid!");
         } else {
             double exchangeRate = getExchangeRate(conversionRequest.getBaseCurrency(), conversionRequest.getTargetCurrency());
             double targetAmount = conversionRequest.getBaseAmount() * exchangeRate;
             if (targetAmount > MAX_AMOUNT) {
-                conversionResponse = ConversionResponse.builder().
-                                                        transactionId(null).
-                                                        responseCode(3).
-                                                        responseMessage("Target amount too long to save!").
-                                                        build();
-                logger.error("Target amount too long!");
+                conversionResponse = ConversionFailed.builder().
+                                                      errorCode(ErrorTypes.TOO_LONG_TARGET_AMOUNT).
+                                                      message("Target amount is too long!").
+                                                      build();
+                logger.error("Target amount is too long!");
             } else {
                 Conversion conversion = Conversion.builder().
                         baseCurrency(conversionRequest.getBaseCurrency()).
@@ -133,12 +142,11 @@ public class FxService {
                         exchangeRate(exchangeRate).
                         build();
                 Conversion savedConversion = conversionRepository.saveAndFlush(conversion);
-                conversionResponse = ConversionResponse.builder().
-                        targetAmount(savedConversion.getTargetAmount()).
-                        transactionId(savedConversion.getTransactionId()).
-                        responseCode(0).
-                        responseMessage("Successful!").
-                        build();
+                conversionResponse = ConversionSuccess.builder().
+                                                       targetAmount(savedConversion.getTargetAmount()).
+                                                       transactionId(savedConversion.getTransactionId()).
+                                                       timestamp(savedConversion.getDate()).
+                                                       build();
                 logger.info("Conversion done successfully!");
             }
         }
@@ -146,7 +154,14 @@ public class FxService {
         return conversionResponse;
     }
 
-    public ConversionListResponse getConversionList(UUID transactionId, Date date, Pageable pageable) {
+    /**
+     * It obtains the information of previously made transactions according to the date or transactionId filters.
+     * @param transactionId Transaction ID of the transaction performed.
+     * @param date The start date from which the following transactions are requested to be listed.
+     * @param pageable It allows the transaction list to be paginated with page and size.
+     * @return Response object generated according to successful and unsuccessful cases.
+     */
+    public ConversionListResponse getConversionList(UUID transactionId, ZonedDateTime date, Pageable pageable) {
         Page conversions = null;
         if (transactionId == null && date == null) {
             conversions = conversionRepository.findAll(pageable);
