@@ -14,6 +14,9 @@ import javax.persistence.Table;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+/**
+ * Conversion transaction table entity.
+ */
 @Data
 @Entity
 @Table(name = "conversion")

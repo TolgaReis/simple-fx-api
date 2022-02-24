@@ -1,0 +1,13 @@
+com.openpayd.simplefxapi
+com.openpayd.simplefxapi.configuration
+com.openpayd.simplefxapi.controller
+com.openpayd.simplefxapi.entity
+com.openpayd.simplefxapi.enums
+com.openpayd.simplefxapi.model
+com.openpayd.simplefxapi.model.conversion
+com.openpayd.simplefxapi.model.conversion.impl
+com.openpayd.simplefxapi.model.conversionlist
+com.openpayd.simplefxapi.model.exchangerate
+com.openpayd.simplefxapi.model.exchangerate.impl
+com.openpayd.simplefxapi.repository
+com.openpayd.simplefxapi.service

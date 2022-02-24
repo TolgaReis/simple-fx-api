@@ -41,6 +41,13 @@ public class FxService {
     private CurrencyApiSettings currencyApiSettings;
     private ConversionRepository conversionRepository;
 
+    /**
+     * Constructor method to inject dependencies.
+     * @param restTemplate Used for rest client.
+     * @param currencyInMemoryRepository Used for handling currency list.
+     * @param currencyApiSettings Used for currency API settings convert properties file to class.
+     * @param conversionRepository Used for database operations for conversion transactions.
+     */
     public FxService(RestTemplate restTemplate,
                      CurrencyInMemoryRepository currencyInMemoryRepository,
                      CurrencyApiSettings currencyApiSettings,

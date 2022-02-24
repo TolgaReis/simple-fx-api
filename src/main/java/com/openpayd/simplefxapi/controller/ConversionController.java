@@ -27,6 +27,10 @@ public class ConversionController {
 
     FxService fxService;
 
+    /**
+     * Constructor method to inject FxService.
+     * @param fxService Used for logical operations.
+     */
     public ConversionController(FxService fxService) {
         this.fxService = fxService;
     }

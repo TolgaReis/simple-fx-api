@@ -20,6 +20,10 @@ public class ExchangeController {
 
     private FxService fxService;
 
+    /**
+     * Constructor method to inject FxService.
+     * @param fxService Used for logical operations.
+     */
     public ExchangeController(FxService fxService) {
         this.fxService = fxService;
     }

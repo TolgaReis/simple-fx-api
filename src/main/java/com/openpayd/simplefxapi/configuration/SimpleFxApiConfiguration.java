@@ -10,6 +10,10 @@ import org.springframework.web.client.RestTemplate;
  */
 @Configuration
 public class SimpleFxApiConfiguration {
+    /**
+     * RestTemplate bean to use as rest client for third part APIs.
+     * @return rest template to use client functions.
+     */
     @Bean
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
