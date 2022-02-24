@@ -13,7 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Data
@@ -34,5 +37,5 @@ public class Conversion {
     @Generated(value = GenerationTime.INSERT)
     private UUID transactionId;
     @Generated(value = GenerationTime.INSERT)
-    private Timestamp date;
+    private ZonedDateTime date;
 }
